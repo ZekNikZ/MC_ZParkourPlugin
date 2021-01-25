@@ -1,0 +1,6 @@
+trigger-blocks:
+  - "minecraft:light_weighted_pressure_plate"
+  - "minecraft:heavy_weighted_pressure_plate"
+  - "minecraft:tripwire"
+
+max-trigger-region-width: 16
