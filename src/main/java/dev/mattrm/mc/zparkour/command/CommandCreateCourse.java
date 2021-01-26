@@ -16,11 +16,11 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
         aliases = {"createcourse"},
         desc = "Create a parkour/elytra course.",
         usage = "Usage: /zp.create <course name>",
-        permission = "zparkour.create",
+        permission = "zparkour.course.create",
         permissionMessage = "You do not permission to use this command."
 ))
 @Permission(
-        name = "zparkour.create",
+        name = "zparkour.course.create",
         desc = "Create a parkour/elytra course",
         defaultValue = PermissionDefault.TRUE
 )

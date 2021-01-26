@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import dev.mattrm.mc.zparkour.data.Trigger;
 import dev.mattrm.mc.zparkour.data.TriggerType;
+import dev.mattrm.mc.zparkour.util.MathUtils;
 import dev.mattrm.mc.zparkour.util.TriTuple;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -57,20 +58,20 @@ public class TriggerService {
     }
 
     public Trigger createTrigger(UUID uniqueId, int courseId, TriggerType type, int sectionNum) {
-        if (!CourseService.getInstance().courseExists(courseId)) {
+        if (!CourseService.getInstance().courseExists(courseId) || !this.canCreateTrigger(uniqueId)) {
             return null;
         }
 
         Trigger trigger = new Trigger(
-                this.regionPos1.get(uniqueId).getBlockX(),
-                this.regionPos1.get(uniqueId).getBlockY(),
-                this.regionPos1.get(uniqueId).getBlockZ(),
-                this.regionPos2.get(uniqueId).getBlockX(),
-                this.regionPos2.get(uniqueId).getBlockY(),
-                this.regionPos2.get(uniqueId).getBlockZ(),
-                type,
-                courseId,
-                sectionNum
+            this.regionPos1.get(uniqueId).getBlockX(),
+            this.regionPos1.get(uniqueId).getBlockY(),
+            this.regionPos1.get(uniqueId).getBlockZ(),
+            this.regionPos2.get(uniqueId).getBlockX(),
+            this.regionPos2.get(uniqueId).getBlockY(),
+            this.regionPos2.get(uniqueId).getBlockZ(),
+            type,
+            courseId,
+            sectionNum
         );
 
         int maxSize = this.plugin.getConfig().getInt("max-trigger-region-width");
@@ -105,5 +106,18 @@ public class TriggerService {
         }
 
         this.triggers.removeIf(t -> t.getCourseId() == courseId);
+    }
+
+    public boolean canCreateTrigger(UUID uniqueId) {
+        return this.regionPos1.containsKey(uniqueId) && this.regionPos2.containsKey(uniqueId);
+    }
+
+    public boolean deleteIfExists(int courseId, int triggerId) {
+        if (MathUtils.between(triggerId, -1, CourseService.getInstance().getCourseById(courseId).getTriggers().size() - 1)) {
+            CourseService.getInstance().getCourseById(courseId).removeTrigger(triggerId);
+            return true;
+        }
+
+        return false;
     }
 }

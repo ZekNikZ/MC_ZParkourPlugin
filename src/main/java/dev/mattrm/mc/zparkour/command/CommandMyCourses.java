@@ -19,11 +19,11 @@ import java.util.UUID;
         aliases = {"mycourses"},
         desc = "Lists your current ZParkour courses.",
         usage = "Usage: /zp.mycourses",
-        permission = "zparkour.list.mine",
+        permission = "zparkour.course.list.mine",
         permissionMessage = "You do not permission to use this command."
 ))
 @Permission(
-        name = "zparkour.list.mine",
+        name = "zparkour.course.list.mine",
         desc = "Lists your current ZParkour courses.",
         defaultValue = PermissionDefault.TRUE
 )

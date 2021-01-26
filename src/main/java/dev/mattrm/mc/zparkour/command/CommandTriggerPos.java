@@ -5,6 +5,7 @@ import dev.mattrm.mc.zparkour.service.CourseService;
 import dev.mattrm.mc.zparkour.service.TriggerService;
 import dev.mattrm.mc.zparkour.util.UUIDUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -60,11 +61,6 @@ public class CommandTriggerPos implements CommandExecutor {
 
             return true;
         }
-
-        String name = String.join(" ", args);
-        int courseId = CourseService.getInstance().createCourse(name, UUIDUtils.getUUIDOfOnlinePlayer(sender.getName()));
-
-        sender.sendMessage(Constants.CHAT_PREFIX + "Successfully created new course \"" + ChatColor.YELLOW + name + ChatColor.RESET + "\" with course ID #" + ChatColor.YELLOW + courseId);
 
         return true;
     }

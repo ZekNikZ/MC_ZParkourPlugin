@@ -1,23 +1,29 @@
 package dev.mattrm.mc.zparkour.data;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import dev.mattrm.mc.zparkour.util.MathUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
 public class Course {
     private final int id;
     private final UUID owner;
-    private String name;
     private final List<Trigger> triggers;
+    private final Map<UUID, Long> leaderboard;
+    private String name;
+    private boolean published;
 
     public Course(int id, UUID owner, String name) {
         this.id = id;
         this.owner = owner;
         this.name = name;
+        this.published = false;
         this.triggers = Lists.newArrayList();
+        this.leaderboard = Maps.newHashMap();
     }
 
     public int getId() {
@@ -34,6 +40,22 @@ public class Course {
 
     public List<Trigger> getTriggers() {
         return this.triggers;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        if (published) {
+            this.leaderboard.clear();
+        }
+
+        this.published = published;
     }
 
     public void addTrigger(Trigger trigger) {

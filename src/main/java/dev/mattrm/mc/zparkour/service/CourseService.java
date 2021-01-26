@@ -65,4 +65,18 @@ public class CourseService {
     public Course getCourseById(int courseId) {
         return this.courses.stream().filter(c -> c.getId() == courseId).findFirst().orElseThrow(() -> new IllegalArgumentException("Course does not exist"));
     }
+
+    public void deleteCourse(int courseId) {
+        TriggerService.getInstance().removeTriggers(courseId);
+        this.courses.removeIf(course -> course.getId() == courseId);
+    }
+
+    public void publishCourse(int courseId) {
+        this.getCourseById(courseId).setPublished(true);
+    }
+
+
+    public void unpublishCourse(int courseId) {
+        this.getCourseById(courseId).setPublished(false);
+    }
 }

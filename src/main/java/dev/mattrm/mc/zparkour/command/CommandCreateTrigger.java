@@ -56,6 +56,11 @@ public class CommandCreateTrigger implements CommandExecutor {
                 return true;
             }
 
+            if (CourseService.getInstance().getCourseById(courseId).isPublished()) {
+                sender.sendMessage(ChatColor.RED + "Error: the course is published. Un-publish it to modify it.");
+                return true;
+            }
+
             if (!CourseService.getInstance().canModify(courseId, player.getUniqueId(), sender.hasPermission("zparkour.trigger.create.all"))) {
                 sender.sendMessage(ChatColor.RED + "Error: you do not have permission to modify that course.");
                 return true;
@@ -78,6 +83,11 @@ public class CommandCreateTrigger implements CommandExecutor {
 
             if (type == TriggerType.SECTION_END) {
                 sectionNum = Integer.parseInt(args[2]);
+            }
+
+            if (!TriggerService.getInstance().canCreateTrigger(player.getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + "Error: use /zp.triggerpos1 and /zp.triggerpos2 to set the corners of the trigger.");
+                return true;
             }
 
             Trigger trigger = TriggerService.getInstance().createTrigger(player.getUniqueId(), courseId, type, sectionNum);
