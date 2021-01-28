@@ -93,7 +93,7 @@ public class CommandCreateTrigger implements CommandExecutor {
             Trigger trigger = TriggerService.getInstance().createTrigger(player.getUniqueId(), courseId, type, sectionNum);
 
             if (trigger == null) {
-                sender.sendMessage(ChatColor.RED + "Error: trigger region is too large. Max dimension length is " + this.maxSize + ".");
+                sender.sendMessage(ChatColor.RED + "Error: trigger region is too large or corners are not in the same dimension. Max dimension length is " + this.maxSize + ".");
                 return true;
             }
 

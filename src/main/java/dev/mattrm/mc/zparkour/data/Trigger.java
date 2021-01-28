@@ -2,6 +2,7 @@ package dev.mattrm.mc.zparkour.data;
 
 import dev.mattrm.mc.zparkour.util.TriTuple;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.util.Objects;
 
@@ -11,8 +12,9 @@ public class Trigger {
     private int x1, x2, y1, y2, z1, z2;
     private TriggerType type;
     private int courseId, sectionId;
+    private final World.Environment dimension;
 
-    public Trigger(int x1, int x2, int y1, int y2, int z1, int z2, TriggerType type, int courseId, int sectionId) {
+    public Trigger(int x1, int x2, int y1, int y2, int z1, int z2, TriggerType type, int courseId, int sectionId, World.Environment environment) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -22,6 +24,11 @@ public class Trigger {
         this.type = type;
         this.courseId = courseId;
         this.sectionId = sectionId;
+        this.dimension = environment;
+    }
+
+    public World.Environment getDimension() {
+        return this.dimension;
     }
 
     public TriggerType getType() {
@@ -97,11 +104,11 @@ public class Trigger {
     }
 
     public boolean contains(Location location) {
-        return contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        return contains(location.getBlockX(), location.getBlockY(), location.getBlockZ(), Objects.requireNonNull(location.getWorld()).getEnvironment());
     }
 
-    public boolean contains(int x, int y, int z) {
-        return between(x, x1, x2) && between(y, y1, y2) && between(z, z1, z2);
+    public boolean contains(int x, int y, int z, World.Environment dimension) {
+        return between(x, x1, x2) && between(y, y1, y2) && between(z, z1, z2) && this.dimension == dimension;
     }
 
     @Override

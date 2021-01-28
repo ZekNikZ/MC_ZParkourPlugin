@@ -56,7 +56,7 @@ public class CommandUnpublishCourse implements CommandExecutor {
                 return true;
             }
 
-            CourseService.getInstance().publishCourse(courseId);
+            CourseService.getInstance().unpublishCourse(courseId);
             sender.sendMessage(Constants.CHAT_PREFIX + "Course unpublished.");
         }
 

@@ -3,6 +3,7 @@ package dev.mattrm.mc.zparkour;
 import dev.mattrm.mc.zparkour.command.CommandRegistry;
 import dev.mattrm.mc.zparkour.event.PlayerEventListener;
 import dev.mattrm.mc.zparkour.service.CourseService;
+import dev.mattrm.mc.zparkour.service.ParkourSessionService;
 import dev.mattrm.mc.zparkour.service.TriggerService;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
@@ -27,6 +28,7 @@ public class ZParkourPlugin extends JavaPlugin {
 
         TriggerService.initialize(this);
         CourseService.initialize(this);
+        ParkourSessionService.initialize(this);
     }
 
     @Override

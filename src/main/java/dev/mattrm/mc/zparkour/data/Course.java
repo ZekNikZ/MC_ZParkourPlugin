@@ -60,12 +60,12 @@ public class Course {
 
     public void addTrigger(Trigger trigger) {
         if (trigger.getType() == TriggerType.COURSE_START) {
-            if (triggers.get(0).getType() == TriggerType.COURSE_START) {
+            if (triggers.size() > 0 && triggers.get(0).getType() == TriggerType.COURSE_START) {
                 throw new IllegalArgumentException("Course already has a start trigger");
             }
             triggers.add(0, trigger);
         } else if (trigger.getType() == TriggerType.COURSE_END) {
-            if (triggers.get(triggers.size() - 1).getType() == TriggerType.COURSE_END) {
+            if (triggers.size() > 0 && triggers.get(triggers.size() - 1).getType() == TriggerType.COURSE_END) {
                 throw new IllegalArgumentException("Course already has an end trigger");
             }
             triggers.add(trigger);
@@ -79,14 +79,19 @@ public class Course {
                         this.triggers.get(this.triggers.size() - 1).getType() == TriggerType.COURSE_END ? this.triggers.size() - 1 : this.triggers.size()
                 );
                 this.triggers.add(pos, trigger);
-                IntStream.range(0, this.triggers.size()).forEach(i -> this.triggers.get(i).setSectionId(i));
             }
+        } else {
+            throw new IllegalArgumentException("Invalid trigger type");
         }
-        throw new IllegalArgumentException("Invalid trigger type");
+        IntStream.range(0, this.triggers.size()).forEach(i -> this.triggers.get(i).setSectionId(i));
     }
 
     public void removeTrigger(int sectionNum) {
         this.triggers.remove(MathUtils.clamp(sectionNum, 0, this.triggers.size() - 1));
         IntStream.range(0, this.triggers.size()).forEach(i -> this.triggers.get(i).setSectionId(i));
+    }
+
+    public boolean isValidCourse() {
+        return this.triggers.size() >= 2 && this.triggers.get(0).getType() == TriggerType.COURSE_START && this.triggers.get(this.triggers.size() - 1).getType() == TriggerType.COURSE_END;
     }
 }

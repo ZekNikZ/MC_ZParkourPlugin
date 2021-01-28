@@ -1,16 +1,21 @@
 package dev.mattrm.mc.zparkour.command;
 
+import com.google.common.collect.Lists;
 import dev.mattrm.mc.zparkour.Constants;
+import dev.mattrm.mc.zparkour.data.Course;
 import dev.mattrm.mc.zparkour.service.CourseService;
 import dev.mattrm.mc.zparkour.service.TriggerService;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.annotation.command.Commands;
 import org.bukkit.plugin.java.annotation.permission.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Commands(@org.bukkit.plugin.java.annotation.command.Command(
     name = "zp.removetrigger",
@@ -30,7 +35,7 @@ import org.bukkit.plugin.java.annotation.permission.Permission;
     desc = "Remove a ZParkour trigger.",
     defaultValue = PermissionDefault.OP
 )
-public class CommandRemoveTrigger implements CommandExecutor {
+public class CommandRemoveTrigger implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length != 2) {
@@ -64,5 +69,32 @@ public class CommandRemoveTrigger implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (!(sender instanceof Player)) {
+            return Lists.newArrayList();
+        }
+
+        Player player = ((Player) sender);
+
+        if (args.length == 1) {
+            return CourseService.getInstance().getCourses().stream().filter(c -> c.getOwner() == player.getUniqueId()).map(Course::getId).map(id -> "" + id).collect(Collectors.toList());
+        } else if (args.length == 2) {
+            int courseId = -1;
+            try {
+                courseId = Integer.parseInt(args[0]);
+            } catch (NumberFormatException ignored) {
+            }
+
+            if (!CourseService.getInstance().courseExists(courseId)) {
+                return Lists.newArrayList();
+            }
+
+            return IntStream.range(0, CourseService.getInstance().getCourseById(courseId).getTriggers().size()).mapToObj(id -> "" + id).collect(Collectors.toList());
+        }
+
+        return Lists.newArrayList();
     }
 }

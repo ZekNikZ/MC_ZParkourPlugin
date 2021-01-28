@@ -1,6 +1,7 @@
 package dev.mattrm.mc.zparkour.command;
 
 import dev.mattrm.mc.zparkour.Constants;
+import dev.mattrm.mc.zparkour.data.Course;
 import dev.mattrm.mc.zparkour.service.CourseService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -46,7 +47,9 @@ public class CommandPublishCourse implements CommandExecutor {
                 return true;
             }
 
-            if (CourseService.getInstance().getCourseById(courseId).isPublished()) {
+            Course course = CourseService.getInstance().getCourseById(courseId);
+
+            if (course.isPublished()) {
                 sender.sendMessage(ChatColor.RED + "Error: the course is already published.");
                 return true;
             }
@@ -54,6 +57,10 @@ public class CommandPublishCourse implements CommandExecutor {
             if (!CourseService.getInstance().canModify(courseId, player.getUniqueId(), sender.hasPermission("zparkour.course.publish.all"))) {
                 sender.sendMessage(ChatColor.RED + "Error: you do not have permission to publish that course.");
                 return true;
+            }
+
+            if (!course.isValidCourse()) {
+
             }
 
             CourseService.getInstance().publishCourse(courseId);
